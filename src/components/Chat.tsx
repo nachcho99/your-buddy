@@ -1,8 +1,12 @@
 import {useState} from 'react';
 import './Chat.scss';
-import type {ChatMessage} from '../types';
-import {ApiService} from '../services/api';
-import IconSend from "./ui/IconSend.tsx";
+import {IconSend} from "./ui/icons/IconSend.tsx";
+import {getSuggestions} from "../services/suggestionServices.ts";
+
+interface ChatMessage {
+  id: string;
+  content: string;
+}
 
 export const Chat = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -15,23 +19,22 @@ export const Chat = () => {
     e.preventDefault();
 
     if (!inputValue.trim()) return;
-    setMessages([])
-
-    // setMessages(prev => [...prev, userMessage]);
     setTopic(inputValue);
-    setInputValue('');
     setIsLoading(true);
-    setError(null);
+
+    clearState();
 
     try {
-      const response = await ApiService.getSuggestions(inputValue);
+      const response = await getSuggestions(inputValue);
 
       if (response.success && response.data.messages?.length > 0) {
         const suggestionsMessage: ChatMessage = {
           id: (Date.now() + 1).toString(),
           content: response.data.messages.map(s => s.content).join('\n\n'),
         };
-        setMessages(prev => [...prev, suggestionsMessage]);
+        setMessages([suggestionsMessage]);
+        // TODO: Replace this with context API or similar
+        window.dispatchEvent(new Event('conversationUpdated'));
       } else {
         setError('There was an error!');
       }
@@ -42,6 +45,12 @@ export const Chat = () => {
     }
   };
 
+  const clearState = () => {
+    setMessages([])
+    setInputValue('');
+    setError(null);
+  }
+
   return (
     <div className="chat-container">
       <div className="chat-messages">
@@ -51,9 +60,7 @@ export const Chat = () => {
           </div>
         )}
 
-        <div
-          className="message user"
-        >
+        <div className="message user">
           <div className="message-content">
             <h2> {topic}</h2>
           </div>
@@ -103,7 +110,9 @@ export const Chat = () => {
             disabled={isLoading}
             className="chat-input"
           />
-          <IconSend className="input-tools" size={36} color="white"/>
+          <button className="input-tools" type="submit">
+            <IconSend  size={36} color="white"/>
+          </button>
         </div>
       </form>
     </div>

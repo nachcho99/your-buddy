@@ -7,7 +7,7 @@ type IconBaseProps = {
   className?: string
 } & React.SVGProps<SVGSVGElement>
 
-const IconBase: React.FC<IconBaseProps> = (
+export const IconBase: React.FC<IconBaseProps> = (
   {
     children,
     size = 24,
@@ -35,6 +35,3 @@ const IconBase: React.FC<IconBaseProps> = (
     </svg>
   )
 }
-
-
-export default IconBase

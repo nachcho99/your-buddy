@@ -1,8 +1,8 @@
 import React from 'react'
-import IconBase from './IconBase'
-import type {IconProps} from "../../types";
+import {IconBase} from './IconBase.tsx'
+import type {IconProps} from "../../../interfaces/common.ts";
 
-const IconSend: React.FC<IconProps> = (props) => (
+export const IconSend: React.FC<IconProps> = (props) => (
   <IconBase {...props}>
     <path
       d="M12 5V19M12 5L6 11M12 5L18 11"
@@ -14,4 +14,3 @@ const IconSend: React.FC<IconProps> = (props) => (
   </IconBase>
 )
 
-export default IconSend
