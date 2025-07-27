@@ -13,7 +13,7 @@ export const Chat = () => {
   const [inputValue, setInputValue] = useState('');
   const [topic, setTopic] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +54,7 @@ export const Chat = () => {
   return (
     <div className="chat-container">
       <div className="chat-messages">
-        {messages.length === 0 && !isLoading && (
+        {messages.length === 0 && !isLoading && !error && (
           <div className="welcome-message">
             <h1>What's on mind today?</h1>
           </div>
